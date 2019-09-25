@@ -1,0 +1,57 @@
+package com.ajmal.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import com.ajmal.entity.Product;
+import com.ajmal.service.ProductService;
+
+
+
+@Controller
+public class ProductController {
+	
+	@Autowired
+	ProductService ps;
+	
+	@GetMapping("/getall")
+	public ModelAndView getAllProducts()
+	{
+		ModelAndView mv=new ModelAndView();
+		mv.setViewName("show");
+		
+		List <Product> products= ps.getAllProducts();
+		mv.addObject("msg",products);
+		return mv;
+	}
+	@PostMapping(value="/addproduct")
+	public String addProduct(Product product)
+	{
+		 ps.addProduct(product);
+		
+		 return "redirect:/index.jsp";
+	}
+	
+@GetMapping("/showadditionform")
+public String showAdditionForm()
+{
+	return "add_product";
+}
+
+@GetMapping("/deleteproduct")
+public String deleteProduct(@RequestParam("pid") int ProductID)
+{
+	ps.deleteProduct(ProductID);
+	return "redirect:/index.jsp";
+}
+@GetMapping("/backtoindex")
+public String backToIndexPage()
+{
+	return "redirect:/index.jsp";
+}
+}
